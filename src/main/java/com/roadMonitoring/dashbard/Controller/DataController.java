@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/a")
 @RestController
 public class DataController {
 

@@ -1,0 +1,42 @@
+.header-row {
+    height: 6vh;
+}
+.header-title{
+    font-size: 50px;
+    font-weight: bold;
+    position: relative;
+}
+.header-btn{
+    text-align: right;
+    position: relative;
+}
+.option-and-report-row{
+    height: 6vh;
+}
+.option-btn{
+    text-align: right;
+}
+.option-report{
+    text-align: center;
+}
+.map-chart-row{
+    height: 35vh;
+}
+#map {
+    border: 1px solid #ccc;
+  }
+.pic-table-row{
+    height: 20vh;
+}
+.chart-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-left: 10px; /* 차트 간의 간격 */
+      width: 45%; /* 파이 차트 너비 조절 */
+      height: 250px; /* 파이 차트 높이 조절 */
+}
+.chui-row{
+    height: 20vh;
+}
