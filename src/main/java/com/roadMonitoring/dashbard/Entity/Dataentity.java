@@ -19,4 +19,5 @@ public class Dataentity {
     private String latitude;    //위도
     private String longitude;   //경도
     private String type;        //불량 타입
+    private String local;       //지역구
 }
