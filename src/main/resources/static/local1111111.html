@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">    <!-- 한국어는 ko, 영어는 en -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Road & Guardrail Monitoring Dashboard</title>    <!-- 아래쪽 구성에서 제목을 바꿔야 바뀜 -->
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100%;
+      width: 100%;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #343a40;
+      color: white;
+    }
+
+    .search-bar {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .content {
+      display: flex;
+      flex: 1;
+      margin-top: 10px;
+    }
+
+    #map {
+      height: 98%;
+      width: 60%;
+      border: 1px solid #ccc;
+    }
+
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      width: 40%;
+      padding: 10px;
+    }
+
+    .status-summary,
+    .detailed-analysis {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 5px; /* 여백을 절반으로 줄임 */
+    }
+
+    .status-summary {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-summary h2 {
+      margin: 0; /* 제목 한 줄로 유지 */
+      margin-bottom: 10px; /* 제목과 표 간격 */
+    }
+
+    .detailed-analysis {
+      margin-top: 5px; /* 여백을 절반으로 줄임 */
+    }
+
+    .thumbnails {
+      display: flex;
+      align-items: center;
+    }
+
+    .thumbnails img {
+      width: 350px; /* 이미지 크기를 늘림 */
+      margin-right: 30px; /* 이미지와 텍스트 사이 여백 */
+    }
+
+    .image-description {
+      font-size: 24px; /* 텍스트 크기 */
+    }
+
+    .additional-sections {
+      display: flex;
+      flex-direction: row;
+      padding: 10px;
+      margin-top: 1px; /* 여백을 절반으로 줄임 */
+    }
+
+    .task-management,
+    .reports-section {
+      background-color: #f8f9fa;
+      padding: 10px;
+      margin-right: 10px; /* 두 기능 사이 여백 */
+      border-radius: 8px;
+      flex: 1; /* 두 기능을 한 줄에 가로로 배치하기 위한 스타일 */
+    }
+
+    .reports-section {
+      margin-right: 0; /* 마지막 요소는 여백 없음 */
+    }
+
+    .trends-and-forecast {
+      background-color: #f8f9fa;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    .trends-and-forecast canvas {
+      width: 100%;
+      height: 200px;
+    }
+
+    /* 표 스타일 */
+    .status-summary table {
+      width: 40%; /* 50%에서 40%로 조정 */
+      border-collapse: collapse;
+    }
+
+    .status-summary th, .status-summary td {
+      border: 2px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .status-summary th {
+      background-color: #343a40;
+      color: white;
+    }
+
+    .status-summary td {
+      color: #333;
+    }
+
+    .status-summary .high {
+      background-color: #f8d7da; /* Light red */
+    }
+
+    .status-summary .medium {
+      background-color: #fff3cd; /* Light orange */
+    }
+
+    .status-summary .low {
+      background-color: #d4edda; /* Light green */
+    }
+
+    .pie-chart-container {
+      display: flex;
+      justify-content: space-between; /* 가로로 배치하기 위한 스타일 추가 */
+      width: 100%;
+    }
+
+    .chart-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-left: 10px; /* 차트 간의 간격 */
+      width: 45%; /* 파이 차트 너비 조절 */
+      height: 250px; /* 파이 차트 높이 조절 */
+    }
+
+    .chart-wrapper canvas {
+      width: 100% !important; /* 차트 캔버스의 너비 */
+      height: 100% !important; /* 차트 캔버스의 높이 */
+    }
+
+    .chart-title {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- 상단 바 -->
+    <header class="header">
+      <h1>Road & Guardrail Monitoring Dashboard</h1>
+      <input type="text" placeholder="검색..." class="search-bar">
+    </header>
+
+    <!-- 지도 및 상태/분석 섹션 -->
+    <div class="content">
+      <!-- 지도 -->
+      <div id="map"></div>
+
+      <!-- 실시간 상태 요약 및 상세 분석 -->
+      <div class="right-panel">
+        <div class="status-summary">
+          <h2>Real-time summary</h2> <!-- 실시간 상태 요약 -->
+          <div class="pie-chart-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>항목</th>
+                  <th>건수</th>
+                  <th>우선도</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="high">
+                  <td>crack</td>
+                  <td>12건</td>
+                  <td><span style="color: red;">우선</span></td>
+                </tr>
+
+                <tr class="medium">
+                  <td>pothole</td>
+                  <td>5건</td>
+                  <td><span style="color: orange;">중간</span></td>
+                </tr>
+
+                <tr class="low">
+                  <td>rust</td>
+                  <td>8건</td>
+                  <td><span style="color: #ffcc00;">낮음</span></td> <!-- 선명한 노란색 -->
+                </tr>
+
+                <!-- 여기에 추가 항목을 삽입할 수 있습니다. -->
+                <tr class="high">
+                  <td>breakage</td>
+                  <td>7건</td>
+                  <td><span style="color: red;">우선</span></td>
+                </tr>
+
+                <tr class="low">
+                  <td>rust_volt</td>
+                  <td>4건</td>
+                  <td><span style="color: #ffcc00;">낮음</span></td> <!-- 선명한 노란색 -->
+                </tr>
+
+                <tr class="high">
+                  <td>empty_volt</td>
+                  <td>2건</td>
+                  <td><span style="color: red;">우선</span></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <!-- 우선도별 원형 그래프 -->
+            <div class="chart-wrapper">
+              <canvas id="priorityPieChart"></canvas>
+              <div class="chart-title">Statistics by Type</div>
+            </div>
+
+            <!-- 지역별 원형 그래프 -->
+            <div class="chart-wrapper">
+              <canvas id="regionPieChart"></canvas>
+              <div class="chart-title">Statistics by Region</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detailed-analysis">
+          <h2>Detailed Status</h2> <!-- 상세 분석 -->
+          <div class="thumbnails">
+            <img src="example_00074.jpg" alt="손상 이미지">
+            <div class="image-description">
+              <p>가드레일 녹 비율: 20%</p>
+              <p>균열 폭: 2cm</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 작업 관리, 보고서 생성, 추세 및 예측 섹션 -->
+    <div class="additional-sections">
+      <!-- 작업 관리 섹션 -->
+      <div class="task-management">
+        <h2>Task management</h2>
+        <ul>
+          <li>수리 요청 1 - 긴급</li>
+          <li>수리 요청 2 - 중간</li>
+          <li>수리 요청 3 - 낮음</li>
+        </ul>
+      </div>
+
+      <!-- 보고서 생성 영역 -->
+      <div class="reports-section">
+        <h2>Reports section</h2>
+        <button>자동 보고서 생성</button>
+        <button>내보내기</button>
+      </div>
+    </div>
+
+    <!-- 그래프 및 차트 -->
+    <div class="trends-and-forecast">
+      <h2>추세 및 예측</h2>
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // 지도 생성 및 초기 설정
+    var map = L.map('map').setView([35.5384, 129.3114], 13);
+
+    // 타일 레이어 추가
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // 예시 마커 추가
+    L.marker([35.5384, 129.3114]).addTo(map)
+      .bindPopup('가드레일 부식')
+      .openPopup();
+
+    // 라인 차트 생성
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['1월', '2월', '3월', '4월', '5월'],
+        datasets: [{
+          label: '손상 건수 추세',
+          data: [10, 15, 8, 12, 20],
+          borderColor: 'blue',
+          fill: false
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // 우선도별 원형 그래프 생성
+    var priorityCtx = document.getElementById('priorityPieChart').getContext('2d');
+    var priorityPieChart = new Chart(priorityCtx, {
+      type: 'pie',
+      data: {
+        labels: ['crack', 'pothole', 'rust', 'breakage', 'rust_volt', 'empty'],
+        datasets: [{
+          data: [12, 5, 8, 7, 4, 2], // 각 우선도별 항목 수
+          backgroundColor: ['#ff6384', '#ffcc00', '#36a2eb', '#4bc0c0', '#9966ff', '#ff9f40']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        }
+      }
+    });
+
+    // 지역별 원형 그래프 생성
+    var regionCtx = document.getElementById('regionPieChart').getContext('2d');
+    var regionPieChart = new Chart(regionCtx, {
+      type: 'pie',
+      data: {
+        labels: ['남구', '동구', '중구', '북구', '울주'],
+        datasets: [{
+          data: [10, 20, 15, 25, 30], // 임의의 값
+          backgroundColor: ['#ff6384', '#36a2eb', '#ffcc00', '#4bc0c0', '#9966ff']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        }
+      }
+    });
+  </script>
+</body>
+</html>

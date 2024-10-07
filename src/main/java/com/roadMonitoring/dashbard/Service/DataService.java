@@ -2,6 +2,7 @@ package com.roadMonitoring.dashbard.Service;
 
 import com.roadMonitoring.dashbard.Entity.Dataentity;
 import com.roadMonitoring.dashbard.Repository.DataRepo;
+import com.roadMonitoring.dashbard.Repository.NameMapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +27,8 @@ public class DataService {
 
     //지역 업데이트
     public void updateLocal(String type){
-        String local = "null";
-        String[] nullLocal = dataRepo.findByTypeLocal(type, local);
-
+        String local = "def";
+        List<NameMapping> nullLocal = dataRepo.findByLocal(local);
     }
 
 
@@ -55,8 +55,14 @@ public class DataService {
         return list;
     }
 
-//    public List<Dataentity> saveLocal(List<Dataentity> de){
-//
-//    }
+    //업데이트
+    public void UpdateLocal(String[] id, String[] local){
+        for(int i = 0 ; i < id.length ;  i++){
+            Dataentity dataentity = dataRepo.findById(id[0]).get();
+            dataentity.setLocal(local[i]);
+            dataRepo.save(dataentity);
+        }
+
+    }
 }
 
