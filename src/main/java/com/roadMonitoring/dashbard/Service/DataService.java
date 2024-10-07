@@ -25,11 +25,11 @@ public class DataService {
     }
 
     //지역 업데이트
-    public void updateLocal(String type){
-        String local = "null";
-        String[] nullLocal = dataRepo.findByTypeLocal(type, local);
-
-    }
+//    public void updateLocal(String type){
+//        String local = "null";
+//        String[] nullLocal = dataRepo.findByTypeLocal(type, local);
+//
+//    }
 
 
 

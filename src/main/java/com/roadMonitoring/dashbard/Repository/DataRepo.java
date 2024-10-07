@@ -10,6 +10,6 @@ import java.util.List;
 public interface DataRepo extends JpaRepository<Dataentity, String> {
 
     public List<Dataentity> findByType(String type);
-    public String[] findByTypeLocal(String type, String local);
+//    public String[] findByTypeLocal(String type, String local);
 }
 
