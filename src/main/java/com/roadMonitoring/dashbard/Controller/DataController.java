@@ -72,8 +72,10 @@ public class DataController {
     @GetMapping("/setlocal")
     public String SetLocal(HttpServletRequest httpServletRequest){
 
-        String[] files = new String[]{httpServletRequest.getParameter("file")};
-        String[] locals = new String[]{httpServletRequest.getParameter("local")};
+        //String[] files = new String[]{httpServletRequest.getParameter("file")};
+        String[] files = new String[]{"G_A_V_04_0901120915653.jpg", "G_C_V_06_1022172106363.jpg", "H_C_F_03_0906151551731.jpg"};
+        //String[] locals = new String[]{httpServletRequest.getParameter("local")};
+        String[] locals = new String[]{"으히히", "으히히", "으히히"};
 
         dataService.UpdateLocal(files, locals);
 

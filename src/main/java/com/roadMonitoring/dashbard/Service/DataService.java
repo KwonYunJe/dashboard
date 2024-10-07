@@ -62,7 +62,6 @@ public class DataService {
             dataentity.setLocal(local[i]);
             dataRepo.save(dataentity);
         }
-
     }
 }
 
