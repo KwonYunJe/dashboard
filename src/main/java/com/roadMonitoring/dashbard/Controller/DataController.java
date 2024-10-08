@@ -37,13 +37,21 @@ public class DataController {
         return list;
     }
 
-    //localhost:8080/crack 조회시
-    @GetMapping("/crack")
+    //localhost:8080/type 조회시
+    @GetMapping("/type")
     //반환타입은 List<Dataentity>
-    public List<Dataentity> getTypeData(){
+    public HashMap<String, List<Dataentity>> getTypeData(){
+
         //Service에서 특정(type이 존재하는) 값 받아오는 메서드 실행
-        List<Dataentity> dataList = dataService.getType("Crack");
-        return dataList;
+        List<Dataentity> crackList = dataService.getType("Crack");
+        List<Dataentity> potholeList = dataService.getType("Pothole");
+
+        HashMap <String, List<Dataentity>> map = new HashMap<>();
+
+        map.put("crack", crackList);
+        map.put("pthole", potholeList);
+
+        return map;
     }
 
     @GetMapping("/local")
@@ -72,12 +80,22 @@ public class DataController {
     @GetMapping("/setlocal")
     public String SetLocal(HttpServletRequest httpServletRequest){
 
-        //String[] files = new String[]{httpServletRequest.getParameter("file")};
-        String[] files = new String[]{"G_A_V_04_0901120915653.jpg", "G_C_V_06_1022172106363.jpg", "H_C_F_03_0906151551731.jpg"};
-        //String[] locals = new String[]{httpServletRequest.getParameter("local")};
-        String[] locals = new String[]{"으히히", "으히히", "으히히"};
+        List<Dataentity> list = dataService.selecttypeAndLocal("def");
+        List<Dataentity> list2 = dataService.selecttypeAndLocal("def");
 
-        dataService.UpdateLocal(files, locals);
+        for(int i = 0 ; i < list.size() ; i++){
+            if(list.get(i).getType().isEmpty()){
+                list2.add(list.get(i));
+            }
+        }
+
+        dataService.update(list2);
+//        //String[] files = new String[]{httpServletRequest.getParameter("file")};
+//        String[] files = new String[]{"G_A_V_04_0901120915653.jpg", "G_C_V_06_1022172106363.jpg", "H_C_F_03_0906151551731.jpg"};
+//        //String[] locals = new String[]{httpServletRequest.getParameter("local")};
+//        String[] locals = new String[]{"으히히", "으히히", "으히히"};
+//
+//        dataService.UpdateLocal(files[0], locals[0]);
 
         return "main";
     }

@@ -12,7 +12,8 @@ public interface DataRepo extends JpaRepository<Dataentity, String> {
 
     public List<Dataentity> findByType(String type);
 
-    public List<NameMapping> findByLocal(String local);
+    public List<Dataentity> findByLocal(String local);
+
 }
 
 

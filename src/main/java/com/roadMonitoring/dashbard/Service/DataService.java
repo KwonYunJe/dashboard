@@ -3,11 +3,13 @@ package com.roadMonitoring.dashbard.Service;
 import com.roadMonitoring.dashbard.Entity.Dataentity;
 import com.roadMonitoring.dashbard.Repository.DataRepo;
 import com.roadMonitoring.dashbard.Repository.NameMapping;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +30,11 @@ public class DataService {
     //지역 업데이트
     public void updateLocal(String type){
         String local = "def";
-        List<NameMapping> nullLocal = dataRepo.findByLocal(local);
+        List<Dataentity> nullLocal = dataRepo.findByLocal(local);
+    }
+
+    public List<Dataentity> selecttypeAndLocal (String local){
+        return dataRepo.findByLocal(local);
     }
 
 
@@ -56,12 +62,11 @@ public class DataService {
     }
 
     //업데이트
-    public void UpdateLocal(String[] id, String[] local){
-        for(int i = 0 ; i < id.length ;  i++){
-            Dataentity dataentity = dataRepo.findById(id[0]).get();
-            dataentity.setLocal(local[i]);
-            dataRepo.save(dataentity);
+    public void update(List<Dataentity> list){
+        for(int i = 0 ; i < list.size() ; i++){
+            list.get(i).setLocal("하하하");
         }
+
     }
 }
 
