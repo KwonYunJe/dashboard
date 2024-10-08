@@ -2,27 +2,24 @@
 var container = document.getElementById('map');
 //지도를 생성할 때 필요한 기본 옵션
 var options = {
-  center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+  center: new kakao.maps.LatLng(35.5395907552704, 129.3115702368008), //지도의 중심좌표.
   level: 5 //지도의 레벨(확대, 축소 정도)
 };
 //지도 생성 및 객체 리턴
 var map = new kakao.maps.Map(container, options);
 
 // 마커를 표시할 위치와 title 객체 배열입니다 
-var markerPositions = [
-  {
-    latlng: new kakao.maps.LatLng(33.450705, 126.570677)
-  },
-  {
-    latlng: new kakao.maps.LatLng(33.450936, 126.569477)
-  },
-  {
-    latlng: new kakao.maps.LatLng(33.450879, 126.569940)
-  },
-  {
-    latlng: new kakao.maps.LatLng(33.451393, 126.570738)
-  }
-];
+
+//마커추가 반복문 예정
+let list = [{}];
+list.push({latlng: new kakao.maps.LatLng(35.5395907552704,129.3115702368008)});
+list.push({latlng: new kakao.maps.LatLng(35.5395407552704,129.3115702368008)});
+list.push({latlng: new kakao.maps.LatLng(35.5395307552704,129.3115702368008)});
+list.push({latlng: new kakao.maps.LatLng(35.5395207552704,129.3115702368008)});
+list.push({latlng: new kakao.maps.LatLng(35.5395107552704,129.3115702368008)});
+//마커추가 반복문 예정
+
+var markerPositions = list;
 
 var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
@@ -45,52 +42,77 @@ for (var i = 0; i < markerPositions.length; i++) {
 // 마커가 지도 위에 표시되도록 설정합니다
 marker.setMap(map);
 
-let lat = 35.5;
-let lng = 129.3;
-var locals = [0];
-getAddr(lat, lng);
+let coordinates = [
+  { lat: 35.5, lng: 129.3 },
+  { lat: 35.6, lng: 129.4 },
+  { lat: 35.4, lng: 129.2 }
+  // 추가 좌표를 여기에 넣을 수 있습니다.
+];
+let locals = [];
+let currentIndex = 0;
 
-function getAddr(lat, lng) {
+getAddr(coordinates[currentIndex]);
+
+function getAddr(coord) {
   let geocoder = new kakao.maps.services.Geocoder();
-  let coord = new kakao.maps.LatLng(lat, lng);
+  let position = new kakao.maps.LatLng(coord.lat, coord.lng);
   let callback = function (result, status) {
     if (status === kakao.maps.services.Status.OK) {
+      console.log(result[0].address.region_2depth_name);
       locals.push(result[0].address.region_2depth_name);
+      
+      // 다음 좌표로 이동
+      currentIndex++;
+      if (currentIndex < coordinates.length) {
+        getAddr(coordinates[currentIndex]);
+      } else {
+        localPlusFun(); // 모든 좌표에 대한 요청이 끝난 후 실행
+      }
+    } else {
+      console.error('Geocoder failed due to: ' + status);
     }
   }
-  geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-  console.log(locals);
-}
-fetch('/index/fetch', { //요청경로
-  method: 'POST',
-  cache: 'no-cache',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-  },
-  //컨트롤러로 전달할 데이터
-  body: new URLSearchParams({
-    // 데이터명 : 데이터값
-    local : locals
-  })
-})
-  .then((response) => {
-    if (!response.ok) {
-      alert('fetch error!\n컨트롤러로 통신중에 오류가 발생했습니다.');
-      return;
-    }
+  
+  geocoder.coord2Address(position.getLng(), position.getLat(), callback);
+};
 
-    return response.text(); //컨트롤러에서 return하는 데이터가 없거나 int, String 일 때 사용
-    //return response.json(); //나머지 경우에 사용
-  })
-  //fetch 통신 후 실행 영역
-  .then((data) => {//data -> controller에서 리턴되는 데이터!
+function localPlusFun() {
 
+  fetch('/index/fetch', { //요청경로
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    //컨트롤러로 전달할 데이터
+    body: new URLSearchParams({
+      // 데이터명 : 데이터값
+      'local': JSON.stringify(locals)
+    })
   })
-  //fetch 통신 실패 시 실행 영역
-  .catch(err => {
-    alert('fetch error!\nthen 구문에서 오류가 발생했습니다.\n콘솔창을 확인하세요!');
-    console.log(err);
-  });
+    .then((response) => {
+      if (!response.ok) {
+        alert('fetch error!\n컨트롤러로 통신중에 오류가 발생했습니다.');
+        return;
+      }
+
+      return response.text(); //컨트롤러에서 return하는 데이터가 없거나 int, String 일 때 사용
+      //return response.json(); //나머지 경우에 사용
+    })
+    //fetch 통신 후 실행 영역
+    .then((data) => {//data -> controller에서 리턴되는 데이터!
+
+    })
+    //fetch 통신 실패 시 실행 영역
+    .catch(err => {
+      alert('fetch error!\nthen 구문에서 오류가 발생했습니다.\n콘솔창을 확인하세요!');
+      console.log(err);
+    });
+
+};
+
+
+
 //================================================================================chart======================================================================================
 //================================================================================chart======================================================================================
 //================================================================================chart======================================================================================
