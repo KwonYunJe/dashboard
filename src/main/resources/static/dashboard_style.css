@@ -1,0 +1,79 @@
+.header-row {
+    height: 7vh;
+    display: flex;
+    background-color: #343a40;
+    color: white;
+}
+.header-title{
+    font-size: 50px;
+    font-weight: bold;
+}
+.header-btn{
+    text-align: right;
+}
+
+.option-and-report-row{
+    text-align: center;
+    height: 6vh;
+}
+.option-btn{
+    text-align: right;
+    padding-top: 0.7%;
+}
+.report{
+    padding-top: 0.5%;
+}
+.map-chart-row{
+    height: 40vh;
+}
+#map {
+    border: 1px solid #ccc;
+}
+.chart-header{
+    text-align: center;
+}
+.pic-table-row{
+    height: 23vh;
+    position: relative;
+}
+.pie-table{
+    padding: 0px;
+    position: relative;
+}
+.pic-header{
+    text-align: center;
+}
+.table-header{
+    text-align: center;
+}
+.crack{
+    color: red;
+}
+.pothole{
+    color: orange;
+}
+.rust{
+    color: blue;
+}
+.breakage{
+    color: aqua;
+}
+.rust_volt{
+    color: yellow;
+}
+.empty_volt{
+    color: aliceblue;
+}
+.chui-header{
+    text-align: center;
+}
+.chart-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 330px; /* 파이 차트 높이 조절 */
+}
+.chui-row{
+    height: 20vh;
+}
