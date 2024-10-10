@@ -49,9 +49,9 @@ public class DataController {
     //지역구가 지정되지 않은 데이터를 갱신
     @GetMapping("/setlocal")
     @ResponseBody
-    public void SetLocal(List<Dataentity> dataentityList, String[] areaArray , HttpServletRequest request){
+    public void SetLocal(String[] idLArray, String[] areaArray , HttpServletRequest request){
 
-        dataService.LocalUpdate(dataentityList, areaArray);
+        dataService.LocalUpdate(idLArray, areaArray);
 
     }
 
