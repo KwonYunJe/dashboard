@@ -4,6 +4,7 @@ import com.roadMonitoring.dashbard.Entity.Dataentity;
 import com.roadMonitoring.dashbard.Repository.DataRepo;
 import com.roadMonitoring.dashbard.Repository.NameMapping;
 import jakarta.transaction.Transactional;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DataService {
 
+
+    //아래는 Repository 관련 메서드
+    /////////////////////////////////////////////////////////////////////////////////////////////
     private final DataRepo dataRepo;
 
     //findAll()로 모든 데이터 받아오기, 반환타입은 List
     public List<Dataentity> getTable(){
-        return dataRepo.findAll();
+        List<Dataentity> ll = dataRepo.findByTypeNotNull();
+
+        System.out.println(ll.size());
+
+        return ll;
     }
 
     //타입이 있는 데이터만 받아오기, 반환타입은 List
@@ -27,19 +35,17 @@ public class DataService {
         return dataRepo.findByType(type);
     }
 
-    //지역 업데이트
-    public void updateLocal(String type){
-        String local = "def";
-        List<Dataentity> nullLocal = dataRepo.findByLocal(local);
+    //업데이트, 지역을 셋팅해야할 데이터 리스트와 셋팅 될 지역 배열을 받음
+    public void LocalUpdate(List<Dataentity> list, String[] areaArray){
+        for(int i = 0 ; i < list.size() ; i++){
+            //i번째 데이터에 i번째 지역을 저장
+            list.get(i).setLocal(areaArray[i]);
+        }
+        //변경된 데이터 모두 저장(Update)
+        dataRepo.saveAll(list);
     }
 
-    public List<Dataentity> selecttypeAndLocal (String local){
-        return dataRepo.findByLocal(local);
-    }
-
-
-
-
+    //아래는 일반 메서드
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //ArrayList반환, 매개변수는 DB의 모든데이터가 담긴 List
     public ArrayList<Dataentity> ShowData(List<Dataentity> dataentityList){
@@ -61,12 +67,46 @@ public class DataService {
         return list;
     }
 
-    //업데이트
-    public void update(List<Dataentity> list){
+
+    //데이터를 타입별로 나눠서 리스트에 저장하는 메서드
+    public List<List<Dataentity>> SelectType(List<Dataentity> list){
+        //반환할 리스트의 리스트
+        List<List<Dataentity>> typeReturn = new ArrayList<>();
+
+        //타입별 리스트
+        List<Dataentity> pothole = new ArrayList<>();
+        List<Dataentity> crack = new ArrayList<>();
+
         for(int i = 0 ; i < list.size() ; i++){
-            list.get(i).setLocal("하하하");
+            String entityType = list.get(i).getType();
+            if(entityType.equals("Crack")){
+                pothole.add(list.get(i));
+            }else if(entityType.equals("Pothole")){
+                crack.add(list.get(i));
+            }
         }
 
+        typeReturn.add(pothole);
+        typeReturn.add(crack);
+
+        return  typeReturn;
     }
+
+    //지역이 def인 데이터만 골라내는 메서드
+    public List<Dataentity> SelectDef(List<Dataentity> list){
+        //지역이 def인 데이터만 담을 리스트
+        List<Dataentity> defLocal = new ArrayList<>();
+
+        for (Dataentity dataentity : list) {
+            if (dataentity.getLocal().equals("def")) {
+                defLocal.add(dataentity);
+            }
+        }
+
+        return defLocal;
+    }
+
+
+
 }
 

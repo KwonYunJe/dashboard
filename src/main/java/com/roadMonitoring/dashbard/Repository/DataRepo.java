@@ -14,6 +14,10 @@ public interface DataRepo extends JpaRepository<Dataentity, String> {
 
     public List<Dataentity> findByLocal(String local);
 
+    public Long countByLocal(String local);
+
+    public List<Dataentity> findByTypeNotNull();
+
 }
 
 
