@@ -13,73 +13,87 @@
 </head>
 
 <body>
-  <!-- 본문내용 -->
-  <div class="container-fluid">
-    <!-- 헤더 / 국가별 셀렉트 -->
+  <div class="div-body">
+    <!-- 헤더 / 보고서 / 국가별 셀렉트 -->
     <div class="row header-row align-items-center">
-      <div class="col-7 header-title">Gaia-x Monitoring Dashboard</div>
-      <div class="col-5 header-btn">
-        <button class="btn btn-secondary btn-lg">KOR</button>
-        <button class="btn btn-secondary btn-lg">GER</button>
+      <div class="col-3">
+        <button class="btn btn-outline-primary">보고서 생성</button>
+        <button class="btn btn btn-outline-primary">내보내기</button>
+      </div>
+      <div class="col-6 header-title">SafeTrack-X</div>
+      <div class="col-3 header-btn">
+        <button class="btn btn-outline-primary">KOR</button>
+        <button class="btn btn-outline-primary">GER</button>
       </div>
     </div>
-    <!-- 옵션 & 보고서 -->
-    <div class="row option-and-report-row">
-      <div class="col-7 option-btn align-items-end">
-        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-          <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-          <label class="btn btn-outline-primary" for="btncheck1">도로</label>
-          <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-          <label class="btn btn-outline-primary" for="btncheck2">가드레일</label>
-          <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
-          <label class="btn btn-outline-primary" for="btncheck3">교통표지판</label>
-        </div>
+    <!-- 소제목(1) -->
+    <div class="row sub-title1">
+      <div class="col-3">
+        <h3 class="map-header">Map</h3>
       </div>
-      <div class="col-5 report">
-        <button class="btn btn-primary btn-lg">보고서 생성</button>
-        <button class="btn btn-primary btn-lg">내보내기</button>
+      <div class="col-3 map-btn">
+        <button class="btn btn-primary btn-sm">도로</button>
+        <button class="btn btn-primary btn-sm">가드레일</button>
+        <button class="btn btn-primary btn-sm">교통표지판</button>
       </div>
-    </div>
-    <!-- 지도 & 원형 차트 -->
-    <div class="row map-chart-row">
-      <div class="col-7 map" id="map">지도</div>
-      <div class="col-5">
+      <div class="col-6 report">
         <h3 class="chart-header">유형별 그래프</h3>
-        <div class="row">
-          <div class="col-6 chart-wrapper">
+      </div>
+    </div>
+    <!-- 지도 컨텐츠 & 도넛 차트 -->
+    <div class="row map-chart-row">
+      <div class="col-6">
+        <div class="map" id="map"></div>
+      </div>
+      <div class="col-3 chart-wrapper">
+        <div class="d-chart">
+          <h5 class="chart-sub-title">요소별 위험도</h4>
             <canvas id="priorityPieChart"></canvas>
-          </div>
-          <div class="col-6 chart-wrapper">
-            <canvas id="regionPieChart"></canvas>
-          </div>
         </div>
+      </div>
+      <div class="col-3">
+        <div class="d-chart">
+          <h5 class="chart-sub-title">지역별 위험도</h5>
+          <canvas id="regionPieChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <!-- 소제목(2) -->
+    <div class="row sub-title2">
+      <div class="col-6">
+        <h3 class="pic-header">Image</h3>
+      </div>
+      <div class="col-6">
+        <h3 class="table-header">지역별 발생현황</h3>
       </div>
     </div>
     <!-- 사진 & 지역별 발생현황 테이블 -->
     <div class="row pic-table-row">
-      <div class="col-7">
-        <h3 class="pic-header">사진</h3>
-        <div class="row">
-          <div class="col-6">사진1</div>
-          <div class="col-6">사진2</div>
+      <div class="col-3">
+        <div class="div pic1">
+          사진1
         </div>
       </div>
-      <div class="col-5 pie-table">
-        <h3 class="table-header">지역별 발생현황</h3>
-        <table class="table table-sm table-dark">
+      <div class="col-3">
+        <div class="div pic1">
+          사진1
+        </div>
+      </div>
+      <div class="col-6">
+        <table class="table">
           <thead>
             <tr>
-              <th>항목</th>
-              <th>남구</th>
-              <th>중구</th>
-              <th>북구</th>
-              <th>동구</th>
-              <th>울주군</th>
+              <th class="th-col">항목</th>
+              <th class="th-col">남구</th>
+              <th class="th-col">중구</th>
+              <th class="th-col">북구</th>
+              <th class="th-col">동구</th>
+              <th class="th-col">울주군</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>crack</td>
+              <td class="table-primary">crack</td>
               <td><span class="crack">12건</span></td>
               <td><span class="crack">10건</span></td>
               <td><span class="crack">2건</span></td>
@@ -87,7 +101,7 @@
               <td><span class="crack">0건</span></td>
             </tr>
             <tr>
-              <td>pothole</td>
+              <td class="table-primary">pothole</td>
               <td><span class="pothole">12건</span></td>
               <td><span class="pothole">10건</span></td>
               <td><span class="pothole">2건</span></td>
@@ -95,7 +109,7 @@
               <td><span class="pothole">0건</span></td>
             </tr>
             <tr>
-              <td>rust</td>
+              <td class="table-primary">rust</td>
               <td><span class="rust">12건</span></td>
               <td><span class="rust">10건</span></td>
               <td><span class="rust">2건</span></td>
@@ -103,7 +117,7 @@
               <td><span class="rust">0건</span></td>
             </tr>
             <tr>
-              <td>breakage</td>
+              <td class="table-primary">breakage</td>
               <td><span class="breakage">12건</span></td>
               <td><span class="breakage">10건</span></td>
               <td><span class="breakage">2건</span></td>
@@ -111,7 +125,7 @@
               <td><span class="breakage">0건</span></td>
             </tr>
             <tr>
-              <td>rust_volt</td>
+              <td class="table-primary">rust_volt</td>
               <td><span class="rust_volt">12건</span></td>
               <td><span class="rust_volt">10건</span></td>
               <td><span class="rust_volt">2건</span></td>
@@ -119,7 +133,15 @@
               <td><span class="rust_volt">0건</span></td>
             </tr>
             <tr>
-              <td>empty_volt</td>
+              <td class="table-primary">empty_volt</td>
+              <td><span class="empty_volt">12건</span></td>
+              <td><span class="empty_volt">10건</span></td>
+              <td><span class="empty_volt">2건</span></td>
+              <td><span class="empty_volt">8건</span></td>
+              <td><span class="empty_volt">0건</span></td>
+            </tr>
+            <tr>
+              <td class="table-primary">asd</td>
               <td><span class="empty_volt">12건</span></td>
               <td><span class="empty_volt">10건</span></td>
               <td><span class="empty_volt">2건</span></td>
@@ -130,21 +152,26 @@
         </table>
       </div>
     </div>
-    <div class="row chui-row">
-      <div class="col chui-row">
+    <!-- 추이 그래프 -->
+    <div class="row sub-title3">
+      <div class="col">
         <h3 class="chui-header">변화 추이</h3>
+      </div>
+    </div>
+    <div class="row chui-row">
+      <div class="col">
         <canvas id="myChart"></canvas>
       </div>
     </div>
   </div>
-  </div>
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e9951f313d7c93e67219e06f9463c1a4&libraries=services"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+  <script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e9951f313d7c93e67219e06f9463c1a4&libraries=services"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
   <script src="/dashboard_style.js"></script>
-
 </body>
 
 </html>

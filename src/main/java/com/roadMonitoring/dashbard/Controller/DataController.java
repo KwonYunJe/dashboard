@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Array;
@@ -18,13 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/data")
 @RestController
 public class DataController {
 
     private  final DataService dataService;
 
-    //localhost:8080/table 조회시
+    //localhost:8080/data/table 조회시
     @GetMapping("/table")
     //반환타입은 ArrayList<Dataentity>
     public ArrayList<Dataentity> getAllData(){
@@ -37,8 +35,9 @@ public class DataController {
         return list;
     }
 
-    //localhost:8080/type 조회시
-    @GetMapping("/type")
+    //비동기 특정 타입 반환
+    @PostMapping("/type")
+    @ResponseBody
     //반환타입은 List<Dataentity>
     public HashMap<String, List<Dataentity>> getTypeData(){
 
