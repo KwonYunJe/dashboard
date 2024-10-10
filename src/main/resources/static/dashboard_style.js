@@ -2,6 +2,8 @@
 //////////////////////////////////////////////////////////////////////////////////fetch//////////////////////////////////////////////////////////////////////////////////////
 let crackList = [];
 let ptholeList = [];
+let locals = [];
+let ids = [];
 fetch('/data/type', { //요청경로
   method: 'POST',
   cache: 'no-cache',
@@ -27,8 +29,8 @@ fetch('/data/type', { //요청경로
   .then((data) => {//data -> controller에서 리턴되는 데이터!
     for (let i = 0; i < data.crack.length; i++) {
       crackList.push(data.crack[i]);
+      ids.push(data.crack[i].id);
     }
-
     for (let i = 0; i < data.pthole.length; i++) {
       ptholeList.push(data.pthole[i]);
     }
@@ -77,15 +79,36 @@ fetch('/data/type', { //요청경로
     // 마커가 지도 위에 표시되도록 설정합니다
     marker.setMap(map);
 
-
-
-
-
-
-
-
-
-
+    let coordinates = [];
+    for (let i = 0 ; i < crackList.length ; i++){
+      coordinates.push({lat : crackList[i].latitude, lng: crackList[i].longitude});
+    }    
+    let currentIndex = 0;
+    
+    getAddr(coordinates[currentIndex]);
+    
+    function getAddr(coord) {
+      let geocoder = new kakao.maps.services.Geocoder();
+      let position = new kakao.maps.LatLng(coord.lat, coord.lng);
+      let callback = function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          console.log(result[0].address.region_2depth_name);
+          locals.push(result[0].address.region_2depth_name);
+    
+          // 다음 좌표로 이동
+          currentIndex++;
+          if (currentIndex < coordinates.length) {
+            getAddr(coordinates[currentIndex]);
+          } else {
+            localPlusFun(); // 모든 좌표에 대한 요청이 끝난 후 실행
+          }
+        } else {
+          console.error('Geocoder failed due to: ' + status);
+        }
+      }
+    
+      geocoder.coord2Address(position.getLng(), position.getLat(), callback);
+    };
 
   })
   //fetch 통신 실패 시 실행 영역
@@ -95,41 +118,6 @@ fetch('/data/type', { //요청경로
   });
 //////////////////////////////////////////////////////////////////////////////////fetch//////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////fetch//////////////////////////////////////////////////////////////////////////////////////
-
-let coordinates = [
-  { lat: 35.5, lng: 129.3 },
-  { lat: 35.6, lng: 129.4 },
-  { lat: 35.4, lng: 129.2 }
-  // 추가 좌표를 여기에 넣을 수 있습니다.
-];
-let locals = [];
-let currentIndex = 0;
-
-getAddr(coordinates[currentIndex]);
-
-function getAddr(coord) {
-  let geocoder = new kakao.maps.services.Geocoder();
-  let position = new kakao.maps.LatLng(coord.lat, coord.lng);
-  let callback = function (result, status) {
-    if (status === kakao.maps.services.Status.OK) {
-      console.log(result[0].address.region_2depth_name);
-      locals.push(result[0].address.region_2depth_name);
-
-      // 다음 좌표로 이동
-      currentIndex++;
-      if (currentIndex < coordinates.length) {
-        getAddr(coordinates[currentIndex]);
-      } else {
-        localPlusFun(); // 모든 좌표에 대한 요청이 끝난 후 실행
-      }
-    } else {
-      console.error('Geocoder failed due to: ' + status);
-    }
-  }
-
-  geocoder.coord2Address(position.getLng(), position.getLat(), callback);
-};
-
 function localPlusFun() {
 
   fetch('/index/fetch', { //요청경로
@@ -141,7 +129,8 @@ function localPlusFun() {
     //컨트롤러로 전달할 데이터
     body: new URLSearchParams({
       // 데이터명 : 데이터값
-      'local': JSON.stringify(locals)
+      'locals': JSON.stringify(locals),
+      'ids':  JSON.stringify(ids)
     })
   })
     .then((response) => {
@@ -154,7 +143,7 @@ function localPlusFun() {
       //return response.json(); //나머지 경우에 사용
     })
     //fetch 통신 후 실행 영역
-    .then((data) => {//data -> controller에서 리턴되는 데이터!
+    .then((data2) => {//data -> controller에서 리턴되는 데이터!
 
     })
     //fetch 통신 실패 시 실행 영역
