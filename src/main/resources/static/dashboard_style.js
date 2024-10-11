@@ -3,7 +3,7 @@
 let crackList = [];
 let ptholeList = [];
 let locals = [];
-let ids = [];
+let isLocalIsDefIds = [];
 fetch('/data/type', { //요청경로
   method: 'POST',
   cache: 'no-cache',
@@ -29,10 +29,15 @@ fetch('/data/type', { //요청경로
   .then((data) => {//data -> controller에서 리턴되는 데이터!
     for (let i = 0; i < data.crack.length; i++) {
       crackList.push(data.crack[i]);
-      ids.push(data.crack[i].id);
+      if (data.crack[i].local == "def") {
+        isLocalIsDefIds.push(data.crack[i].id);
+      }
     }
     for (let i = 0; i < data.pthole.length; i++) {
       ptholeList.push(data.pthole[i]);
+      if (data.pthole[i].local == "def") {
+        isLocalIsDefIds.push(data.pthole[i].id);
+      }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////map//////////////////////////////////////////////////////////////////////////
@@ -53,8 +58,8 @@ fetch('/data/type', { //요청경로
     //마커 추가
     let markerList = [];
 
-    for(let i = 0 ; i < crackList.length; i++){
-      markerList.push({latlng: new kakao.maps.LatLng(crackList[i].latitude, crackList[i].longitude)})
+    for (let i = 0; i < crackList.length; i++) {
+      markerList.push({ latlng: new kakao.maps.LatLng(crackList[i].latitude, crackList[i].longitude) })
     }
 
     var markerPositions = markerList;
@@ -80,35 +85,73 @@ fetch('/data/type', { //요청경로
     marker.setMap(map);
 
     let coordinates = [];
-    for (let i = 0 ; i < crackList.length ; i++){
-      coordinates.push({lat : crackList[i].latitude, lng: crackList[i].longitude});
-    }    
+    for (let i = 0; i < crackList.length; i++) {
+      coordinates.push({ lat: crackList[i].latitude, lng: crackList[i].longitude });
+    }
     let currentIndex = 0;
-    
+
     getAddr(coordinates[currentIndex]);
-    
+
     function getAddr(coord) {
       let geocoder = new kakao.maps.services.Geocoder();
       let position = new kakao.maps.LatLng(coord.lat, coord.lng);
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
-          console.log(result[0].address.region_2depth_name);
-          locals.push(result[0].address.region_2depth_name);
-    
+          if (data.crack[currentIndex].local == "def") {
+            locals.push(result[0].address.region_2depth_name);
+          }
+
           // 다음 좌표로 이동
           currentIndex++;
           if (currentIndex < coordinates.length) {
             getAddr(coordinates[currentIndex]);
           } else {
-            localPlusFun(); // 모든 좌표에 대한 요청이 끝난 후 실행
+            if (locals.length != 0) {
+              console.log(locals);
+              localPlusFun(); // 모든 좌표에 대한 요청이 끝난 후 실행
+            }
           }
         } else {
           console.error('Geocoder failed due to: ' + status);
         }
       }
-    
+
       geocoder.coord2Address(position.getLng(), position.getLat(), callback);
     };
+    //================================================================================chart======================================================================================
+    //================================================================================chart======================================================================================
+    //================================================================================chart======================================================================================
+
+    // 우선도별 원형 그래프 생성
+    var priorityCtx = document.getElementById('priorityPieChart');
+    var priorityPieChart = new Chart(priorityCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['crack', 'pothole', 'rust', 'breakage', 'rust_volt', 'empty'],
+        datasets: [{
+          data: [crackList.length, 5, 8, 7, 4, 2], // 각 우선도별 항목 수
+          backgroundColor: ['#ff6384', '#ffcc00', '#36a2eb', '#4bc0c0', '#9966ff', '#ff9f40'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutoutPercentage: 60, //도넛 중앙 공간 크기 설정
+        rotation: 1 * Math.PI, //방향
+        circumference: 1 * Math.PI, //도넛차트 부분 각도 설정
+        legend: {
+          display: true, // 범례 표시 여부
+          position: 'top',
+          labels: {
+            padding: 15, // 범례와 차트 사이의 간격 설정 (값을 조정하여 간격 조절)
+            boxWidth: 10 // 범례 색상 박스 크기 조절
+          }
+        }
+      }
+    });
+
+
+
+
 
   })
   //fetch 통신 실패 시 실행 영역
@@ -120,7 +163,7 @@ fetch('/data/type', { //요청경로
 //////////////////////////////////////////////////////////////////////////////////fetch//////////////////////////////////////////////////////////////////////////////////////
 function localPlusFun() {
 
-  fetch('/index/fetch', { //요청경로
+  fetch('/data/fetch', { //요청경로
     method: 'POST',
     cache: 'no-cache',
     headers: {
@@ -130,7 +173,7 @@ function localPlusFun() {
     body: new URLSearchParams({
       // 데이터명 : 데이터값
       'locals': JSON.stringify(locals),
-      'ids':  JSON.stringify(ids)
+      'ids': JSON.stringify(isLocalIsDefIds)
     })
   })
     .then((response) => {
@@ -158,32 +201,7 @@ function localPlusFun() {
 //================================================================================chart======================================================================================
 //================================================================================chart======================================================================================
 
-// 우선도별 원형 그래프 생성
-var priorityCtx = document.getElementById('priorityPieChart');
-var priorityPieChart = new Chart(priorityCtx, {
-  type: 'doughnut',
-  data: {
-    labels: ['crack', 'pothole', 'rust', 'breakage', 'rust_volt', 'empty'],
-    datasets: [{
-      data: [12, 5, 8, 7, 4, 2], // 각 우선도별 항목 수
-      backgroundColor: ['#ff6384', '#ffcc00', '#36a2eb', '#4bc0c0', '#9966ff', '#ff9f40'],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    cutoutPercentage: 60, //도넛 중앙 공간 크기 설정
-    rotation: 1 * Math.PI, //방향
-    circumference: 1 * Math.PI, //도넛차트 부분 각도 설정
-    legend: {
-      display: true, // 범례 표시 여부
-      position: 'top',
-      labels: {
-        padding: 15, // 범례와 차트 사이의 간격 설정 (값을 조정하여 간격 조절)
-        boxWidth: 10 // 범례 색상 박스 크기 조절
-      }
-    }
-  }
-});
+
 
 // 지역별 원형 그래프 생성
 var regionCtx = document.getElementById('regionPieChart');

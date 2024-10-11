@@ -36,6 +36,34 @@ public class DataService {
     public List<Dataentity> selecttypeAndLocal (String local){
         return dataRepo.findByLocal(local);
     }
+    public void LocalUpdate(String[] idArray, String[] areaArray){
+        //엔티티 리스트 생성
+        List<Dataentity> up = new ArrayList<>();
+
+        for(int i = 0 ; i < idArray.length ; i++){
+            //빈 엔티티 생성
+            Dataentity de = new Dataentity();
+            //파일명으로 데이터 한개 검색후 엔티티에 저장
+            Optional<Dataentity> updateEntity = dataRepo.findById(idArray[i]);
+
+            //검색결과가 값이 있을 경우(대부분의 경우)
+            if(updateEntity.isPresent()){
+                //빈 엔티티와 검색된 엔티티를 일치시킴
+                de.setId(updateEntity.get().getId());
+                de.setDate(updateEntity.get().getDate());
+                de.setType(updateEntity.get().getType());
+                de.setLongitude(updateEntity.get().getLongitude());
+                de.setLatitude(updateEntity.get().getLatitude());
+                //지역값을 새로 셋팅해야하니 새 값을 set,
+                //위에 일치화 시킨이유는 save 했을 때 빈값(null)이 DB에도 그대로 적용되기 때문에
+                de.setLocal(areaArray[i]);
+            }
+            //해당 엔티티 객체를 리스트에 저장
+            up.add(de);
+        }
+        //변경된 데이터 모두 저장(Update)
+        dataRepo.saveAll(up);
+    }
 
 
 
