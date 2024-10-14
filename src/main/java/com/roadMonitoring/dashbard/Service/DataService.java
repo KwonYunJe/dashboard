@@ -22,6 +22,11 @@ public class DataService {
         return dataRepo.findAll();
     }
 
+    //타입이 존재하는 데이터만 받아오기, 반환타입은 List
+    public List<Dataentity> getTypeNotEmpty(){
+        return dataRepo.findByTypeNot("");
+    }
+
     //타입이 있는 데이터만 받아오기, 반환타입은 List
     public List<Dataentity> getType(String type){
         return dataRepo.findByType(type);

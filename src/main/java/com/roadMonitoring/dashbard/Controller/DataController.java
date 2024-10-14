@@ -52,6 +52,7 @@ public class DataController {
 
         HashMap <String, List<Dataentity>> map = new HashMap<>();
 
+        map.put("allType",dataService.getTypeNotEmpty());
 //        map.put("crack", crackList);
 //        map.put("pthole", potholeList);
 

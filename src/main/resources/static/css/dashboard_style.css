@@ -159,16 +159,13 @@ table .th-col{
     color: orange;
 }
 .rust{
-    color: black;
+    color: yellow;
 }
 .breakage{
-    color: black;
+    color: green;
 }
-.rust_volt{
-    color: black;
-}
-.empty_volt{
-    color: black;
+.demaged_panal{
+    color: blue;
 }
 
 
