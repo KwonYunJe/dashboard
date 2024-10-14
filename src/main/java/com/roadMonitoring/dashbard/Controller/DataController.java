@@ -47,13 +47,13 @@ public class DataController {
     public HashMap<String, List<Dataentity>> getTypeData(){
 
         //Service에서 특정(type이 존재하는) 값 받아오는 메서드 실행
-        List<Dataentity> crackList = dataService.getType("Crack");
-        List<Dataentity> potholeList = dataService.getType("Pothole");
+//        List<Dataentity> crackList = dataService.getType("Crack");
+//        List<Dataentity> potholeList = dataService.getType("Pothole");
 
         HashMap <String, List<Dataentity>> map = new HashMap<>();
 
-        map.put("crack", crackList);
-        map.put("pthole", potholeList);
+//        map.put("crack", crackList);
+//        map.put("pthole", potholeList);
 
         return map;
     }
