@@ -21,16 +21,14 @@ public class DataService {
     /////////////////////////////////////////////////////////////////////////////////////////////
     private final DataRepo dataRepo;
 
-    //findAll()로 모든 데이터 받아오기, 반환타입은 List
-    public List<Dataentity> getTable(){
-        List<Dataentity> ll = dataRepo.findByTypeNotNull();
 
-        System.out.println(ll.size());
-
-        return ll;
+    //타입이 존재하는 데이터만 받아오기, 반환타입은 List
+    public List<Dataentity> getTypeNotEmpty(){
+        return dataRepo.findByTypeNot("");
     }
 
-    //타입이 있는 데이터만 받아오기, 반환타입은 List
+
+    //원하는 타입의 데이터만 받아오기 반환타입은 List
     public List<Dataentity> getType(String type){
         return dataRepo.findByType(type);
     }
@@ -125,6 +123,7 @@ public class DataService {
 
         return defLocal;
     }
+
 
 
 
