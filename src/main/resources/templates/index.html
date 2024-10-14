@@ -13,17 +13,21 @@
 </head>
 
 <body>
-  <div class="div-body">
+  <div >
     <!-- 헤더 / 보고서 / 국가별 셀렉트 -->
     <div class="row header-row align-items-center">
       <div class="col-3">
-        <button class="btn btn-outline-primary">보고서 생성</button>
-        <button class="btn btn btn-outline-primary">내보내기</button>
+        <button class="btn btn-outline-primary" id="btn-report">보고서 생성</button>
+        <button class="btn btn btn-outline-primary" id="btn-report">내보내기</button> 
       </div>
       <div class="col-6 header-title">SafeTrack-X</div>
       <div class="col-3 header-btn">
-        <button class="btn btn-outline-primary">KOR</button>
-        <button class="btn btn-outline-primary">GER</button>
+        <input type="radio" class="btn-check" name="local-options" id="local-option1" autocomplete="off" checked>
+        <label class="btn btn-primary" for="local-option1" id="btn-Nationality">KOR</label>
+        <input type="radio" class="btn-check" name="local-options" id="local-option2" autocomplete="off">
+        <label class="btn btn-primary" for="local-option2" id="btn-Nationality">GER</label>
+        <!-- <button class="btn btn-outline-primary">KOR</button>
+        <button class="btn btn-outline-primary">GER</button> -->
       </div>
     </div>
     <!-- 소제목(1) -->
@@ -32,11 +36,14 @@
         <h3 class="map-header">Map</h3>
       </div>
       <div class="col-3 map-btn">
-        <button class="btn btn-primary btn-sm">도로</button>
-        <button class="btn btn-primary btn-sm">가드레일</button>
-        <button class="btn btn-primary btn-sm">교통표지판</button>
+        <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" checked>
+        <label class="btn btn-primary btn-sm" for="option1" id="btn-radio">도 로</label>
+        <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
+        <label class="btn btn-primary btn-sm " for="option2" id="btn-radio">가드레일</label>
+        <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off">
+        <label class="btn btn-primary btn-sm" for="option3" id="btn-radio">교통표지판</label>
       </div>
-      <div class="col-6 report">
+      <div class="col-6">
         <h3 class="chart-header">유형별 그래프</h3>
       </div>
     </div>
@@ -45,10 +52,10 @@
       <div class="col-6">
         <div class="map" id="map"></div>
       </div>
-      <div class="col-3 chart-wrapper">
+      <div class="col-3">
         <div class="d-chart">
           <h5 class="chart-sub-title">요소별 위험도</h4>
-            <canvas id="priorityPieChart"></canvas>
+          <canvas id="priorityPieChart"></canvas>
         </div>
       </div>
       <div class="col-3">
@@ -69,18 +76,26 @@
     </div>
     <!-- 사진 & 지역별 발생현황 테이블 -->
     <div class="row pic-table-row">
-      <div class="col-3">
-        <div class="div pic1">
+      <div class="col-3 pic-col">
+        <div class="pic1">
           사진1
         </div>
       </div>
-      <div class="col-3">
-        <div class="div pic1">
+      <div class="col-3 pic-col">
+        <div class="pic1">
           사진1
         </div>
       </div>
-      <div class="col-6">
+      <div class="col pic-col">
         <table class="table">
+          <colgroup>
+            <col width="25%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+          </colgroup>
           <thead>
             <tr>
               <th class="th-col">항목</th>
@@ -93,7 +108,7 @@
           </thead>
           <tbody>
             <tr>
-              <td class="table-primary">crack</td>
+              <td class="table-primary">Crack</td>
               <td><span class="crack">12건</span></td>
               <td><span class="crack">10건</span></td>
               <td><span class="crack">2건</span></td>
@@ -101,7 +116,7 @@
               <td><span class="crack">0건</span></td>
             </tr>
             <tr>
-              <td class="table-primary">pothole</td>
+              <td class="table-primary">Pothole</td>
               <td><span class="pothole">12건</span></td>
               <td><span class="pothole">10건</span></td>
               <td><span class="pothole">2건</span></td>
@@ -109,7 +124,7 @@
               <td><span class="pothole">0건</span></td>
             </tr>
             <tr>
-              <td class="table-primary">rust</td>
+              <td class="table-primary">Rust</td>
               <td><span class="rust">12건</span></td>
               <td><span class="rust">10건</span></td>
               <td><span class="rust">2건</span></td>
@@ -117,7 +132,7 @@
               <td><span class="rust">0건</span></td>
             </tr>
             <tr>
-              <td class="table-primary">breakage</td>
+              <td class="table-primary">Breakage</td>
               <td><span class="breakage">12건</span></td>
               <td><span class="breakage">10건</span></td>
               <td><span class="breakage">2건</span></td>
@@ -125,28 +140,12 @@
               <td><span class="breakage">0건</span></td>
             </tr>
             <tr>
-              <td class="table-primary">rust_volt</td>
-              <td><span class="rust_volt">12건</span></td>
-              <td><span class="rust_volt">10건</span></td>
-              <td><span class="rust_volt">2건</span></td>
-              <td><span class="rust_volt">8건</span></td>
-              <td><span class="rust_volt">0건</span></td>
-            </tr>
-            <tr>
-              <td class="table-primary">empty_volt</td>
-              <td><span class="empty_volt">12건</span></td>
-              <td><span class="empty_volt">10건</span></td>
-              <td><span class="empty_volt">2건</span></td>
-              <td><span class="empty_volt">8건</span></td>
-              <td><span class="empty_volt">0건</span></td>
-            </tr>
-            <tr>
-              <td class="table-primary">asd</td>
-              <td><span class="empty_volt">12건</span></td>
-              <td><span class="empty_volt">10건</span></td>
-              <td><span class="empty_volt">2건</span></td>
-              <td><span class="empty_volt">8건</span></td>
-              <td><span class="empty_volt">0건</span></td>
+              <td class="table-primary">Damaged panel</td>
+              <td><span class="demaged_panal">12건</span></td>
+              <td><span class="demaged_panal">10건</span></td>
+              <td><span class="demaged_panal">2건</span></td>
+              <td><span class="demaged_panal">8건</span></td>
+              <td><span class="demaged_panal">0건</span></td>
             </tr>
           </tbody>
         </table>
@@ -160,8 +159,8 @@
     </div>
     <div class="row chui-row">
       <div class="col">
-        <canvas id="myChart"></canvas>
-      </div>
+          <canvas id="myChart"></canvas>
+        </div>
     </div>
   </div>
 

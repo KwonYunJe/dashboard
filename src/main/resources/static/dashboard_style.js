@@ -127,10 +127,10 @@ fetch('/data/type', { //요청경로
     var priorityPieChart = new Chart(priorityCtx, {
       type: 'doughnut',
       data: {
-        labels: ['crack', 'pothole', 'rust', 'breakage', 'rust_volt', 'empty'],
+        labels: ['Crack', 'Pothole', 'Rust', 'Breakage', 'Damaged panel'],
         datasets: [{
-          data: [crackList.length, 5, 8, 7, 4, 2], // 각 우선도별 항목 수
-          backgroundColor: ['#ff6384', '#ffcc00', '#36a2eb', '#4bc0c0', '#9966ff', '#ff9f40'],
+          data: [crackList.length, ptholeList.length, 8, 7, 4], // 각 우선도별 항목 수
+          backgroundColor: ['#ff645c', '#ffad29', '#f4e278', '#1bce5b', '#5a74ff'],
           borderWidth: 0
         }]
       },
@@ -148,7 +148,6 @@ fetch('/data/type', { //요청경로
         }
       }
     });
-
 
 
 
@@ -203,7 +202,7 @@ function localPlusFun() {
 
 
 
-// 지역별 원형 그래프 생성
+// 지역별 위험도 도넛 차트
 var regionCtx = document.getElementById('regionPieChart');
 var regionPieChart = new Chart(regionCtx, {
   type: 'doughnut',
@@ -212,7 +211,7 @@ var regionPieChart = new Chart(regionCtx, {
     datasets: [{
       data: [100, 20, 50, 60, 35],
       backgroundColor: [
-        '#ff6384', '#36a2eb', '#ffcc00', '#4bc0c0', '#9966ff'
+        '#ff645c', '#ffad29', '#f4e278', '#1bce5b', '#5a74ff'
       ],
       borderWidth: 0
     }]
@@ -225,7 +224,7 @@ var regionPieChart = new Chart(regionCtx, {
       display: true, // 범례 표시 여부
       position: 'top',
       labels: {
-        padding: 15, // 범례와 차트 사이의 간격 설정 (값을 조정하여 간격 조절)
+        padding: 10, // 범례와 차트 사이의 간격 설정 (값을 조정하여 간격 조절)
         boxWidth: 25 // 범례 색상 박스 크기 조절
       }
     }
@@ -242,20 +241,20 @@ var myChart = new Chart(ctx, {
     datasets: [
       {
         label: '도로 추세',
-        data: [10, 15, 8, 12, 20, 30, 20, 6, 12, 14, 20, 15],
-        borderColor: 'skyblue',
+        data: [10, 15, 8, 12, 20, 28, 20, 6, 12, 14, 20, 15],
+        borderColor: '#ff645c',
         fill: false
       },
       {
         label: '가드레일 추세',
         data: [5, 10, 5, 9, 15, 25, 18, 8, 10, 12, 18, 12],
-        borderColor: 'orange',
+        borderColor: '#ffad29',
         fill: false
       },
       {
         label: '교통표지판 추세',
         data: [7, 12, 9, 14, 18, 22, 17, 10, 11, 13, 17, 10],
-        borderColor: 'green',
+        borderColor: '#1bce5b',
         fill: false
       }
     ]
@@ -271,7 +270,7 @@ var myChart = new Chart(ctx, {
       display: true, // 범례 표시 여부
       position: 'top',
       labels: {
-        padding: 20, // 범례와 차트 사이의 간격 설정 (값을 조정하여 간격 조절)
+        padding: 15, // 범례와 차트 사이의 간격 설정 (값을 조정하여 간격 조절)
         boxWidth: 30 // 범례 색상 박스 크기 조절
       }
     }

@@ -1,7 +1,7 @@
 /* 폰트 */
 body {
     font-family: 'Pretendard-Regular';
-    background-color: #f3f3f3;
+    background-color: #f5f5f7;
     width: 90%;
     margin: 0 auto;
 }
@@ -11,6 +11,7 @@ body {
     font-weight: 300;
     font-style: normal;
 }
+
 /* .div-boby{
     background-color: #f3f3f3;
     width: 90%;
@@ -19,30 +20,51 @@ body {
 
 /* 헤더 */
 .header-row {
-    height: 6vh;
+    height: 7vh;
     display: flex;
     background-color: #ffffff;
     color: #0d6efd;
     box-shadow: 0 2px 2px rgba(0,0,0,0.1);
 }
 .header-title{
-    font-size: 250%;
+    height: 7vh;
+    font-size: 190%;
     font-weight: bold;
     text-align: center;
+    padding-top: 0.8%;
 }
 .header-btn{
     text-align: right;
 }
+#btn-report{
+    width: 25%;
+    --bs-btn-padding-y: .20rem; 
+    --bs-btn-padding-x: .5rem; 
+    --bs-btn-font-size: .90rem;
+}
+#btn-Nationality{
+    width: 20%;
+    --bs-btn-padding-y: .20rem; 
+    --bs-btn-padding-x: .5rem; 
+    --bs-btn-font-size: .90rem;
+}
+#btn-radio{
+    width: 17%;
+    --bs-btn-padding-y: .20rem; 
+    --bs-btn-padding-x: .5rem; 
+    --bs-btn-font-size: .70rem;
+}
+
 /* 소제목 */
 .sub-title1{
     height: 6vh;
     text-align: left;
-    padding-top: 1.6%;
+    padding-top: 1.7%;
 }
 .sub-title2, .sub-title3{
     height: 5vh;
     text-align: left;
-    padding-top: 1%;
+    padding-top: 1.2%;
 }
 
 /* 지도 */
@@ -52,33 +74,34 @@ body {
 .map-header, .chart-header, .table-header, .pic-header, .chui-header{
     text-align: left;
     font-weight: bold;
-    font-size: 140%;
+    font-size: 120%;
     color: #0d6efd;
 }
 #map {
     height: 28vh;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+    /* border: 1px solid #ccc; */
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    -ms-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    -o-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .map-btn{
     text-align: right;
 }
 
 /* 도넛 차트 */
-.chart-wrapper{
-    height: 28vh;
-}
+
 .chart-sub-title{
     text-align: center;
+    font-weight: bold;
+    color: #555555;
     background-color: #ffffff;
-    font-size: 120%;
-    padding-top: 3%;
-    padding-left: 12px;
-    padding-right: 12px;
-    padding-bottom: 1%;
+    font-size: 110%;
+    padding-top: 7%;
 }
 .d-chart{
-    padding-bottom: 2%;
+    height: 28vh;
     background-color: #ffffff;
     -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -87,21 +110,36 @@ body {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-/* 사진 */
-.pic-table-row{
-    height: 26vh;
-    position: relative;
+#priorityPieChart{
+    height: 28vh;
+    padding-top: 5%;
+    padding-left: 7%;
+    padding-right: 7%;
+}
+#regionPieChart{
+    height: 28vh;
+    padding-top: 5%;
+    padding-left: 7%;
+    padding-right: 7%;
 }
 
+/* 사진 */
+.pic-table-row{
+    height: 23vh;
+    position: relative;
+}
+.pic-col{
+    height: 23vh;
+}
 .pic1, .pic2{
+    height: 23vh;
     background-color: #ccc;
     text-align: center;
-    height: 26vh;
 }
 
 /* 테이블 */
 .table{
-    height: 26vh;
+    height: 23vh;
     text-align: center;
     -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -112,7 +150,6 @@ body {
 table .th-col{
     background-color: rgb(13, 110, 253);
     color: #ffffff;
-    font-size: large;
 }
 
 .crack{
@@ -122,13 +159,13 @@ table .th-col{
     color: orange;
 }
 .rust{
-    color: blue;
+    color: black;
 }
 .breakage{
-    color: aqua;
+    color: black;
 }
 .rust_volt{
-    color: purple
+    color: black;
 }
 .empty_volt{
     color: black;
@@ -140,6 +177,7 @@ table .th-col{
     height: 22vh;
 }
 #myChart{
+    height: 22vh;
     background-color: #ffffff;
     -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
