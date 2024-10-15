@@ -114,23 +114,38 @@ fetch('/data/type', { //요청경로
     /////////////////////////////////////////////////////////////////////////////////////////road///////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////road///////////////////////////////////////////////////////////////////////////////
     for (let i = 0; i < crackList.length; i++) {
-      roadMarkerList.push({ latlng: new kakao.maps.LatLng(crackList[i].latitude, crackList[i].longitude) })
+      roadMarkerList.push({
+        content: 'crack',
+        latlng: new kakao.maps.LatLng(crackList[i].latitude, crackList[i].longitude)
+      })
     }
     for (let i = 0; i < ptholeList.length; i++) {
-      roadMarkerList.push({ latlng: new kakao.maps.LatLng(ptholeList[i].latitude, ptholeList[i].longitude) })
+      roadMarkerList.push({
+        content: 'pothole',
+        latlng: new kakao.maps.LatLng(ptholeList[i].latitude, ptholeList[i].longitude)
+      })
     }
     /////////////////////////////////////////////////////////////////////////////////////////guardRail///////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////guardRail///////////////////////////////////////////////////////////////////////////////
     for (let i = 0; i < rustList.length; i++) {
-      guardRailMarkerList.push({ latlng: new kakao.maps.LatLng(rustList[i].latitude, rustList[i].longitude) })
+      guardRailMarkerList.push({
+        content: 'rust',
+        latlng: new kakao.maps.LatLng(rustList[i].latitude, rustList[i].longitude)
+      })
     }
     for (let i = 0; i < breakageList.length; i++) {
-      guardRailMarkerList.push({ latlng: new kakao.maps.LatLng(breakageList[i].latitude, breakageList[i].longitude) })
+      guardRailMarkerList.push({
+        content: 'breakage',
+        latlng: new kakao.maps.LatLng(breakageList[i].latitude, breakageList[i].longitude)
+      })
     }
     /////////////////////////////////////////////////////////////////////////////////////////panel///////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////panel///////////////////////////////////////////////////////////////////////////////
     for (let i = 0; i < damagedPanelList.length; i++) {
-      panelMarkerList.push({ latlng: new kakao.maps.LatLng(damagedPanelList[i].latitude, damagedPanelList[i].longitude) })
+      panelMarkerList.push({
+        content: 'damaged panel',
+        latlng: new kakao.maps.LatLng(damagedPanelList[i].latitude, damagedPanelList[i].longitude)
+      })
     }
     creatingMap(roadMarkerList);
     //================================================================================chart======================================================================================
@@ -327,6 +342,7 @@ var myChart = new Chart(ctx, {
 /////////////////////////////////////////////////////////////////////////////////////map//////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////map//////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////map//////////////////////////////////////////////////////////////////////////
+
 function creatingMap(MarkerList) {
   //지도를 담을 영역의 DOM 레퍼런스
   var container = document.getElementById('map');
@@ -340,27 +356,32 @@ function creatingMap(MarkerList) {
 
   var markerPositions = MarkerList;
 
-  var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
   for (var i = 0; i < markerPositions.length; i++) {
-
-    // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new kakao.maps.Size(24, 35);
-
-    // 마커 이미지를 생성합니다    
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-    // 마커를 생성합니다
     var marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도
-      position: markerPositions[i].latlng, // 마커를 표시할 위치
-      title: markerPositions[i].title // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      position: positions[i].latlng // 마커의 위치
     });
+    var infowindow = new kakao.maps.InfoWindow({
+      content: positions[i].content // 인포윈도우에 표시할 내용
+    });
+    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
   }
   // 마커가 지도 위에 표시되도록 설정합니다
-  marker.setMap(map);
 }
 
+function makeOverListener(map, marker, infowindow) {
+  return function () {
+    infowindow.open(map, marker);
+  };
+}
+
+// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+function makeOutListener(infowindow) {
+  return function () {
+    infowindow.close();
+  };
+}
 
 ////////////////////////////////////////////////////////////////일반 js///////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////일반 js///////////////////////////////////////////////////////////////
@@ -372,13 +393,13 @@ function dataCollection() {
 function removeMarker(type) {
   document.querySelector("#map").innerHTML = '';
 
-  if(type === 'road'){
+  if (type === 'road') {
     creatingMap(roadMarkerList);
   }
-  else if(type === 'guard'){
+  else if (type === 'guard') {
     creatingMap(guardRailMarkerList);
   }
-  else if(type === 'panel'){
+  else if (type === 'panel') {
     creatingMap(panelMarkerList);
   }
 }
